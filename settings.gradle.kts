@@ -5,7 +5,5 @@ pluginManagement {
         mavenCentral()
     }
 }
-
 rootProject.name = "GeyanLib"
-
 include(":shared")
