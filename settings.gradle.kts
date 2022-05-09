@@ -6,4 +6,7 @@ pluginManagement {
     }
 }
 rootProject.name = "GeyanLib"
+
+//includeBuild("buildSrc")
+
 include(":shared")

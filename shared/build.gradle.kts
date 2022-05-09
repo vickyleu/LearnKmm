@@ -13,8 +13,15 @@ kotlin {
     iosX64()
     iosArm64()
     iosSimulatorArm64()
-
+    // Enable concurrent sweep phase in new native memory manager. (This will be enabled by default in 1.7.0)
+    // https://kotlinlang.org/docs/whatsnew1620.html#concurrent-implementation-for-the-sweep-phase-in-new-memory-manager
+    targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget> {
+        binaries.all {
+            freeCompilerArgs = freeCompilerArgs + "-Xgc=cms"
+        }
+    }
     cocoapods {
+
         summary = "Some description for the Shared Module"
         homepage = "Link to the Shared Module homepage"
         ios.deploymentTarget = Versions.deploymentTarget
@@ -36,6 +43,16 @@ kotlin {
             version = Versions.gysdk_pod
             moduleName = "GeYanSdk"
         }
+//        pod("GTCommonSDK") {
+//            source = git("https://github.com/GetuiLaboratory/getui-gtcsdk-ios-cocoapods.git") {
+//                tag = Versions.gtcommon_pod
+//            }
+//        }
+        pod("GTCommonSDK"){
+            version = Versions.gtcommon_pod
+            moduleName = "libGTCommonSDK-1.2.5.0"
+        }
+        useLibraries()
         // Maps custom Xcode configuration to NativeBuildType
         xcodeConfigurationToNativeBuildType["CUSTOM_DEBUG"] = org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType.DEBUG
         xcodeConfigurationToNativeBuildType["CUSTOM_RELEASE"] = org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType.RELEASE
@@ -101,6 +118,12 @@ android {
     defaultConfig {
         minSdk = Versions.minSdk
         targetSdk = Versions.targetSdk
+    }
+    compileOptions {
+        // Flag to enable support for the new language APIs
+//        isCoreLibraryDesugaringEnabled = true
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
 
