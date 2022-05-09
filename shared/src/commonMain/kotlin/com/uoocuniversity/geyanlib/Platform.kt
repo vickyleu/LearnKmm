@@ -5,7 +5,7 @@ data class PlatformDependencies(
     val someIosOnlyDependency: Any?
 )
 
-expect class Platform() {
+expect class Platform{
     actual fun preload()
 }
 
