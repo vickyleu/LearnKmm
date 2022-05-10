@@ -2,6 +2,7 @@ package com.uoocuniversity.geyanlib
 
 import com.uoocuniversity.geyanlib.common.CommonMethodCall
 import com.uoocuniversity.geyanlib.common.CommonMethodChannel
+import com.uoocuniversity.geyanlib.common.PlatformDependencies
 import com.uoocuniversity.geyanlib.common.kMethodChannel
 
 class PlatformImpl: kMethodChannel {
@@ -11,7 +12,7 @@ class PlatformImpl: kMethodChannel {
 
     }
 
-    fun initGeyanSdk(deps:PlatformDependencies): String {
+    fun initGeyanSdk(deps: PlatformDependencies): String {
         platform=PlatformFactory(deps).createPlatform()
         return ""
     }

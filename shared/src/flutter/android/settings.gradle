@@ -1,3 +1,3 @@
 rootProject.name = 'geyan'
-include(":shared")
-project(":shared").projectDir = rootDir.parentFile.parentFile.parentFile
+include(":shared.androidMain")
+project(":shared.androidMain").projectDir = rootDir.parentFile.parentFile.parentFile

@@ -6,8 +6,8 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
-actual abstract class CommonPlugin<T : kMethodChannel> actual constructor(val channelName:String) : FlutterPlugin, ActivityAware,
-    MethodChannel.MethodCallHandler {
+actual open class CommonPlugin<T : kMethodChannel> actual constructor(val channelName:String)
+    : FlutterPlugin, ActivityAware,MethodChannel.MethodCallHandler {
 
     private lateinit var realChannel : MethodChannel
 
@@ -15,7 +15,7 @@ actual abstract class CommonPlugin<T : kMethodChannel> actual constructor(val ch
         get() = TODO("Not yet implemented")
         set(value) {}
 
-    actual abstract fun createMethodChannel(): T
+    actual fun createMethodChannel(): T = TODO("Not yet implemented")
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         methodChannel.onMethodCall(
