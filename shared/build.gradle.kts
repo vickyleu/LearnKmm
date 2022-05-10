@@ -7,27 +7,27 @@ plugins {
 version = Versions.library_version
 
 kotlin {
-    android{
-//        publishLibraryVariants("release", "debug")
+    android()
+    listOf(
+//        iosX64(),
+        iosArm64(),
+//        iosSimulatorArm64()
+    ).forEach {
+       /* it.binaries.framework {
+        }*/
     }
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
+
     // Enable concurrent sweep phase in new native memory manager. (This will be enabled by default in 1.7.0)
     // https://kotlinlang.org/docs/whatsnew1620.html#concurrent-implementation-for-the-sweep-phase-in-new-memory-manager
     targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget> {
         binaries.all {
-            freeCompilerArgs = freeCompilerArgs + "-Xgc=cms"
+//            freeCompilerArgs = freeCompilerArgs + "-Xgc=cms"
         }
     }
     cocoapods {
-
         summary = "Some description for the Shared Module"
         homepage = "Link to the Shared Module homepage"
         ios.deploymentTarget = Versions.deploymentTarget
-//        specRepos {
-//            url("https://github.com/Kotlin/kotlin-cocoapods-spec.git")
-//        }
         specRepos {
             url("https://github.com/CocoaPods/Specs.git")
         }
@@ -37,39 +37,35 @@ kotlin {
             // Bitcode embedding
             embedBitcode(org.jetbrains.kotlin.gradle.plugin.mpp.Framework.BitcodeEmbeddingMode.BITCODE)
         }
-        pod("GYSDK"){
-            //BUG,因为Pod名字与实际library名字不一样,目前需要找到真实的Framework名字才能使用
-            //类似于 https://github.com/CocoaPods/Specs/XXXXXXXX/GYSDK/2.2.0.0/GYSDK.podspec.json
-            version = Versions.gysdk_pod
-            moduleName = "GeYanSdk"
-        }
-//        pod("GTCommonSDK") {
-//            source = git("https://github.com/GetuiLaboratory/getui-gtcsdk-ios-cocoapods.git") {
-//                tag = Versions.gtcommon_pod
-//            }
+//        pod("GYSDK"){
+//            //BUG,因为Pod名字与实际library名字不一样,目前需要找到真实的Framework名字才能使用
+//            //类似于 https://github.com/CocoaPods/Specs/XXXXXXXX/GYSDK/2.2.0.0/GYSDK.podspec.json
+//            version = Versions.gysdk_pod
+//            moduleName = "GeYanSdk"
 //        }
-        pod("GTCommonSDK"){
-            version = Versions.gtcommon_pod
-            moduleName = "libGTCommonSDK-1.2.5.0"
+
+        pod("GYSDK") {
+            moduleName = "GeYanSdk" //BUG,因为Pod名字与实际library名字不一样,目前需要找到真实的Framework名字才能使用
+            source = path(project.file("../libs/getui-gysdk-ios-cocoapods-2.2.0.0"))
         }
+        pod("GTCommonSDK") {
+            source = path(project.file("../libs/getui-gtcsdk-ios-cocoapods-1.2.8.0-spm"))
+        }
+
         useLibraries()
         // Maps custom Xcode configuration to NativeBuildType
         xcodeConfigurationToNativeBuildType["CUSTOM_DEBUG"] = org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType.DEBUG
         xcodeConfigurationToNativeBuildType["CUSTOM_RELEASE"] = org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType.RELEASE
     }
-    /*sourceSets.all {
-        languageSettings.apply {
-            languageVersion = "1.9" // possible values: '1.0', '1.1', '1.2', '1.3', '1.4', '1.5', '1.6', '1.7', '1.8', '1.9'
-            apiVersion = "1.7" // possible values: '1.0', '1.1', '1.2', '1.3', '1.4', '1.5', '1.6', '1.7'
-//            enableLanguageFeature("InlineClasses") // language feature name
-//            optIn("kotlin.ExperimentalUnsignedTypes") // annotation FQ-name
-            progressiveMode = true // false by default
-        }
-    }*/
     sourceSets {
         all {
             languageSettings.apply {
+                languageVersion = "1.7" // possible values: '1.0', '1.1', '1.2', '1.3', '1.4', '1.5', '1.6', '1.7', '1.8', '1.9'
+                apiVersion = "1.7" // possible values: '1.0', '1.1', '1.2', '1.3', '1.4', '1.5', '1.6', '1.7'
                 optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
+                enableLanguageFeature("InlineClasses") // language feature name
+                optIn("kotlin.ExperimentalUnsignedTypes") // annotation FQ-name
+                progressiveMode = true // false by default
             }
         }
         val commonMain by getting{
@@ -94,16 +90,16 @@ kotlin {
             }
         }
 
-        val iosX64Main by getting
+//        val iosX64Main by getting
         val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
+//        val iosSimulatorArm64Main by getting
         val iosMain by creating {
             dependsOn(commonMain)
-            iosX64Main.dependsOn(this)
+//            iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
-            iosSimulatorArm64Main.dependsOn(this)
+//            iosSimulatorArm64Main.dependsOn(this)
         }
-        configure(listOf(iosArm64Main, iosX64Main)) {
+        configure(listOf(iosArm64Main,)) {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-native:${Versions.coroutines_native}")
             }
@@ -118,6 +114,8 @@ android {
     defaultConfig {
         minSdk = Versions.minSdk
         targetSdk = Versions.targetSdk
+        manifestPlaceholders["GETUI_APPID"] = "你的  GETUI_APPID"
+        manifestPlaceholders["GT_INSTALL_CHANNEL"] = "你的 GT_INSTALL_CHANNEL"
     }
     compileOptions {
         // Flag to enable support for the new language APIs

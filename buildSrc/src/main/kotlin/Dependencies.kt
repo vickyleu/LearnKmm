@@ -16,8 +16,7 @@ object Versions {
     val coreKtx = "1.2.0"
     val koin = "3.2.0-beta-1"
     val kodein_di = "7.11.0"
-    val gysdk_pod = "~> 2.2.0.0"
-    val gtcommon_pod = "1.2.5.0"
+
     val gysdk = "3.0.3.0"
     val gysdk_gtc = "3.1.7.0"
     val appcompat = "1.3.0-alpha01"

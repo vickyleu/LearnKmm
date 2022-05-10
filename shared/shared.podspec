@@ -9,8 +9,8 @@ Pod::Spec.new do |spec|
     spec.vendored_frameworks      = 'build/cocoapods/framework/shared.framework'
     spec.libraries                = 'c++'
     spec.ios.deployment_target = '10.0'
-    spec.dependency 'GTCommonSDK', '1.2.5.0'
-    spec.dependency 'GYSDK', '~> 2.2.0.0'
+    spec.dependency 'GTCommonSDK'
+    spec.dependency 'GYSDK'
                 
     spec.pod_target_xcconfig = {
         'KOTLIN_PROJECT_PATH' => ':shared',
