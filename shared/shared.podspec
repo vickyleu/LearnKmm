@@ -9,6 +9,7 @@ Pod::Spec.new do |spec|
     spec.vendored_frameworks      = 'build/cocoapods/framework/shared.framework'
     spec.libraries                = 'c++'
     spec.ios.deployment_target = '10.0'
+    spec.dependency 'Flutter'
     spec.dependency 'GTCommonSDK'
     spec.dependency 'GYSDK'
                 

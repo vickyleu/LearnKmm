@@ -1,9 +1,5 @@
 package com.uoocuniversity.geyanlib
-
-data class PlatformDependencies(
-    val androidContext: Any?,
-    val someIosOnlyDependency: Any?
-)
+import com.uoocuniversity.geyanlib.common.PlatformDependencies
 
 expect class Platform{
     actual fun preload()

@@ -1,0 +1,3 @@
+rootProject.name = 'geyan'
+include(":shared")
+project(":shared").projectDir = rootDir.parentFile.parentFile.parentFile
