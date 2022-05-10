@@ -159,7 +159,7 @@ kotlin {
             dependsOn(commonMain)
             val sourceList = arrayListOf<Any>()
             sourceList.addAll(resources.srcDirs)
-            sourceList.add(file("${projectDir.parentFile}${File.separator}libs"))
+            sourceList.add(file("${projectDir.parentFile}/libs"))
             resources.setSrcDirs(sourceList)
 //            iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
@@ -180,7 +180,7 @@ kotlin {
 
 android {
     compileSdk = compileSdkValue
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    sourceSets["main"].manifest.srcFile("src${File.separator}androidMain${File.separator}AndroidManifest.xml")
     defaultConfig {
         minSdk = minSdkValue
         targetSdk = targetSdkValue
