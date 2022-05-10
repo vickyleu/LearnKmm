@@ -87,19 +87,19 @@ kotlin {
             url("https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git")
             url("https://cdn.cocoapods.org/")
         }
+        pod("Flutter")
         framework {
             baseName = "shared"
             isStatic = false
             // Bitcode embedding
             embedBitcode(org.jetbrains.kotlin.gradle.plugin.mpp.Framework.BitcodeEmbeddingMode.BITCODE)
         }
-//        pod("GYSDK"){
+//       pod("GYSDK"){
 //            //BUG,因为Pod名字与实际library名字不一样,目前需要找到真实的Framework名字才能使用
 //            //类似于 https://github.com/CocoaPods/Specs/XXXXXXXX/GYSDK/2.2.0.0/GYSDK.podspec.json
 //            version = gysdk_pod
 //            moduleName = "GeYanSdk"
-//        }
-        pod("Flutter")
+//       }
         pod("GYSDK") {
             moduleName = "GeYanSdk" //BUG,因为Pod名字与实际library名字不一样,目前需要找到真实的Framework名字才能使用
             source = path(project.file("../libs/getui-gysdk-ios-cocoapods-2.2.0.0"))
@@ -157,6 +157,10 @@ kotlin {
 //        val iosSimulatorArm64Main by getting
         val iosMain by creating {
             dependsOn(commonMain)
+            val sourceList = arrayListOf<Any>()
+            sourceList.addAll(resources.srcDirs)
+            sourceList.add(file("${projectDir.parentFile}${File.separator}libs"))
+            resources.setSrcDirs(sourceList)
 //            iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
 //            iosSimulatorArm64Main.dependsOn(this)
