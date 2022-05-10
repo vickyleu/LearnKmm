@@ -2,4 +2,3 @@ rootProject.name = 'android'
 
 include(":shared")
 project(":shared").projectDir = file("${rootDir.parentFile.parentFile}${File.separator}shared")
-println("rootDir.parentFile.parentFile==${rootDir.parentFile.parentFile} ${project(":shared").projectDir}")
