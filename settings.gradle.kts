@@ -15,4 +15,4 @@ rootProject.name = "GeyanLib"
 include(":shared")
 
 include(":flutter")
-project(":flutter").projectDir = file("${project(":shared").projectDir}${File.pathSeparator}src${File.pathSeparator}flutter")
+project(":flutter").projectDir = file("${rootDir}${File.separator}flutter")

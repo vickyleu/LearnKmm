@@ -13,6 +13,10 @@ actual open class CommonPlugin<T : kMethodChannel> actual constructor(val channe
 
     actual fun createMethodChannel(): T = TODO("Not yet implemented")
 
+    init {
+        createMethodChannel()
+    }
+
     override fun registerWithRegistrar(registrar: NSObject) {
         val engine = registrar as FlutterPluginRegistrarProtocol
         engine.addMethodCallDelegate(

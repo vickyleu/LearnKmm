@@ -54,7 +54,7 @@ android {
 def flutter_lib = "1.0.0-029e8fdf54966a866004d9f4b937aa6d724a4d4d"
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation project(':shared.androidMain')
+    implementation project(':shared')
     compileOnly("io.flutter:flutter_embedding_debug:$flutter_lib")
     compileOnly("io.flutter:arm64_v8a_debug:$flutter_lib")
     compileOnly("io.flutter:armeabi_v7a_debug:$flutter_lib")
