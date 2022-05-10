@@ -5,8 +5,8 @@ import platform.Foundation.NSCocoaErrorDomain
 import platform.Foundation.NSError
 import platform.darwin.NSObject
 
-actual open class CommonPlugin<T : kMethodChannel> actual constructor(val channelName:String)
-    : NSObject(),FlutterPluginProtocolMeta,FlutterPluginProtocol{
+actual class CommonPlugin<T : kMethodChannel> actual constructor(private val channelName: String) :
+    NSObject(), FlutterPluginProtocolMeta, FlutterPluginProtocol {
     internal actual var methodChannel: T
         get() = TODO("Not yet implemented")
         set(value) {}
@@ -21,9 +21,14 @@ actual open class CommonPlugin<T : kMethodChannel> actual constructor(val channe
         val engine = registrar as FlutterPluginRegistrarProtocol
         engine.addMethodCallDelegate(
             delegate = this,
-            channel = FlutterMethodChannel(channelName,binaryMessenger = registrar.messenger(), codec = FlutterStandardMethodCodec())
+            channel = FlutterMethodChannel(
+                channelName,
+                binaryMessenger = registrar.messenger(),
+                codec = FlutterStandardMethodCodec()
+            )
         )
     }
+
     override fun handleMethodCall(call: FlutterMethodCall, result: FlutterResult) {
         methodChannel.onMethodCall(
             call = CommonMethodCall(
@@ -57,3 +62,4 @@ actual open class CommonPlugin<T : kMethodChannel> actual constructor(val channe
         )
     }
 }
+

@@ -14,5 +14,5 @@ pluginManagement {
 rootProject.name = "GeyanLib"
 include(":shared")
 
-include(":flutter")
-project(":flutter").projectDir = file("${rootDir}${File.separator}flutter")
+//include(":flutter")
+//project(":flutter").projectDir = file("${rootDir}${File.separator}flutter")

@@ -6,20 +6,16 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
-actual open class CommonPlugin<T : kMethodChannel> actual constructor(val channelName:String)
-    : FlutterPlugin, ActivityAware,MethodChannel.MethodCallHandler {
+actual class CommonPlugin<T : kMethodChannel> actual constructor(private val channelName: String) :
+    FlutterPlugin, ActivityAware, MethodChannel.MethodCallHandler {
 
-    private lateinit var realChannel : MethodChannel
+    private lateinit var realChannel: MethodChannel
 
     internal actual var methodChannel: T
         get() = TODO("Not yet implemented")
         set(value) {}
 
     actual fun createMethodChannel(): T = TODO("Not yet implemented")
-
-    init {
-        createMethodChannel()
-    }
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         methodChannel.onMethodCall(
@@ -53,7 +49,7 @@ actual open class CommonPlugin<T : kMethodChannel> actual constructor(val channe
 
     override fun onDetachedFromActivity() {
         activityPluginBinding = null
-        if(this::realChannel.isInitialized){
+        if (this::realChannel.isInitialized) {
             this.realChannel.setMethodCallHandler(null)
         }
     }
@@ -68,7 +64,7 @@ actual open class CommonPlugin<T : kMethodChannel> actual constructor(val channe
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         engineBinding = binding
-        if(!this::realChannel.isInitialized){
+        if (!this::realChannel.isInitialized) {
             this.realChannel = MethodChannel(binding.binaryMessenger, channelName)
         }
         this.realChannel.setMethodCallHandler(this)
@@ -76,9 +72,11 @@ actual open class CommonPlugin<T : kMethodChannel> actual constructor(val channe
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         engineBinding = null
-        if(this::realChannel.isInitialized){
+        if (this::realChannel.isInitialized) {
             this.realChannel.setMethodCallHandler(null)
         }
     }
 
 }
+
+
