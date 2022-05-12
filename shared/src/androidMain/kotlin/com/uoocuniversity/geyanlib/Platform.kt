@@ -7,7 +7,7 @@ import com.g.gysdk.GyCallBack
 import com.uoocuniversity.geyanlib.common.PlatformDependencies
 
 actual class Platform constructor(val manager: GYManager) {
-    actual fun preload() {
+    actual suspend fun preload() {
         manager.ePreLogin(1000, object : GyCallBack {
             override fun onSuccess(response: GYResponse?) {
             }
@@ -19,7 +19,7 @@ actual class Platform constructor(val manager: GYManager) {
 }
 
 actual class PlatformFactory actual constructor(val platformDeps: PlatformDependencies) {
-    actual fun createPlatform(): Platform {
+    actual suspend fun createPlatform(): Platform {
         val context = platformDeps.androidContext as? Context
             ?: error("missing context in platform deps")
 

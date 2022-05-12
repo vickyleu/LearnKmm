@@ -5,17 +5,10 @@ import platform.Foundation.NSCocoaErrorDomain
 import platform.Foundation.NSError
 import platform.darwin.NSObject
 
-actual class CommonPlugin<T : kMethodChannel> actual constructor(private val channelName: String) :
+actual final class CommonPlugin<T : kMethodChannel> actual constructor(private val channelName: String) :
     NSObject(), FlutterPluginProtocolMeta, FlutterPluginProtocol {
-    internal actual var methodChannel: T
-        get() = TODO("Not yet implemented")
-        set(value) {}
-
-    actual fun createMethodChannel(): T = TODO("Not yet implemented")
-
-    init {
-        createMethodChannel()
-    }
+    internal lateinit var _methodChannel:T
+    internal actual val methodChannel: T = _methodChannel
 
     override fun registerWithRegistrar(registrar: NSObject) {
         val engine = registrar as FlutterPluginRegistrarProtocol
@@ -30,6 +23,7 @@ actual class CommonPlugin<T : kMethodChannel> actual constructor(private val cha
     }
 
     override fun handleMethodCall(call: FlutterMethodCall, result: FlutterResult) {
+        val rltDartPointer = result
         methodChannel.onMethodCall(
             call = CommonMethodCall(
                 method = call.method,
@@ -37,8 +31,8 @@ actual class CommonPlugin<T : kMethodChannel> actual constructor(private val cha
                 platformDependencies = PlatformDependencies(null, call.arguments)
             ),
             result = object : CommonMethodChannel.Result {
-                override fun success(successResult: Any?) {
-                    result?.invoke(successResult)
+                override fun success(result: Any?) {
+                    rltDartPointer?.invoke(result)
                 }
 
                 override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
@@ -56,7 +50,7 @@ actual class CommonPlugin<T : kMethodChannel> actual constructor(private val cha
                 }
 
                 override fun notImplemented() {
-                    result?.invoke(FlutterMethodNotImplemented)
+                    rltDartPointer?.invoke(FlutterMethodNotImplemented)
                 }
             }
         )

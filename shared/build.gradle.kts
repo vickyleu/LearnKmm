@@ -44,36 +44,27 @@ version = library_version
 
 kotlin {
     android()
-
-    listOf(
-//        iosX64(),
-        iosArm64(),
-//        iosSimulatorArm64()
-    ).forEach {
-        tasks.register<org.jetbrains.kotlin.gradle.tasks.FatFrameworkTask>("releaseIOSFramework") {
-            baseName = "shared"
-            destinationDir = buildDir.resolve("cocoapods/framework")
-            val isReleaseBuild = !"$version".contains("dev", ignoreCase = false)
-            val buildType = if (isReleaseBuild) "RELEASE" else "DEBUG"
+    iosArm64()
+    tasks.register<org.jetbrains.kotlin.gradle.tasks.FatFrameworkTask>("releaseIOSFramework") {
+        baseName = "shared"
+        destinationDir = buildDir.resolve("cocoapods/framework")
+        val isReleaseBuild = !"$version".contains("dev", ignoreCase = false)
+        val buildType = if (isReleaseBuild) "RELEASE" else "DEBUG"
 //            from(
 //                it.binaries.getFramework(buildType),
 //            )
-        }
     }
 
     targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget> {
         binaries.all {
             // Enable concurrent sweep phase in new native memory manager. (This will be enabled by default in 1.7.0)
-            // https://kotlinlang.org/docs/whatsnew1620.html#concurrent-implementation-for-the-sweep-phase-in-new-memory-manager
 //            freeCompilerArgs = freeCompilerArgs + "-Xgc=cms"
         }
         compilations["main"].kotlinOptions.freeCompilerArgs += "-Xexport-kdoc"
     }
-
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.CInteropProcess::class.java) {
         settings.extraOpts(listOf("-compiler-option", "-DNS_FORMAT_ARGUMENT(A)="))
     }
-
 
     cocoapods {
         summary = "Some description for the Shared Module"
@@ -94,12 +85,6 @@ kotlin {
             // Bitcode embedding
             embedBitcode(org.jetbrains.kotlin.gradle.plugin.mpp.Framework.BitcodeEmbeddingMode.BITCODE)
         }
-//       pod("GYSDK"){
-//            //BUG,因为Pod名字与实际library名字不一样,目前需要找到真实的Framework名字才能使用
-//            //类似于 https://github.com/CocoaPods/Specs/XXXXXXXX/GYSDK/2.2.0.0/GYSDK.podspec.json
-//            version = gysdk_pod
-//            moduleName = "GeYanSdk"
-//       }
         pod("GYSDK") {
             moduleName = "GeYanSdk" //BUG,因为Pod名字与实际library名字不一样,目前需要找到真实的Framework名字才能使用
             source = path(project.file("../libs/getui-gysdk-ios-cocoapods-2.2.0.0"))
@@ -113,26 +98,26 @@ kotlin {
         xcodeConfigurationToNativeBuildType["CUSTOM_DEBUG"] = org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType.DEBUG
         xcodeConfigurationToNativeBuildType["CUSTOM_RELEASE"] = org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType.RELEASE
     }
-    sourceSets {
 
+    sourceSets {
         all {
             languageSettings.apply {
                 languageVersion = "1.7" // possible values: '1.0', '1.1', '1.2', '1.3', '1.4', '1.5', '1.6', '1.7', '1.8', '1.9'
                 apiVersion = "1.7" // possible values: '1.0', '1.1', '1.2', '1.3', '1.4', '1.5', '1.6', '1.7'
                 optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
-                enableLanguageFeature("InlineClasses") // language feature name
+//                enableLanguageFeature("InlineClasses") // language feature name
                 optIn("kotlin.ExperimentalUnsignedTypes") // annotation FQ-name
                 progressiveMode = true // false by default
             }
         }
         val commonMain by getting{
             dependencies {
-                // Koin for Kotlin apps
 //                implementation("io.insert-koin:koin-core:${koin}")
                 implementation("org.kodein.di:kodein-di:${kodein_di}")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutines}")
             }
         }
+
 
         val androidMain by getting{
             dependsOn(commonMain)
@@ -152,35 +137,29 @@ kotlin {
             }
         }
 
-//        val iosX64Main by getting
         val iosArm64Main by getting
-//        val iosSimulatorArm64Main by getting
         val iosMain by creating {
             dependsOn(commonMain)
+            iosArm64Main.dependsOn(this)
             val sourceList = arrayListOf<Any>()
             sourceList.addAll(resources.srcDirs)
             sourceList.add(file("${projectDir.parentFile}/libs"))
             resources.setSrcDirs(sourceList)
-//            iosX64Main.dependsOn(this)
-            iosArm64Main.dependsOn(this)
-//            iosSimulatorArm64Main.dependsOn(this)
-        }
-        configure(listOf(iosArm64Main,)) {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-native:${coroutines_native}")
             }
         }
-
-
-
-
     }
 
 }
 
 android {
     compileSdk = compileSdkValue
-    sourceSets["main"].manifest.srcFile("src${File.separator}androidMain${File.separator}AndroidManifest.xml")
+    sourceSets {
+        getByName("main") {
+            manifest.srcFile ("src/androidMain/AndroidManifest.xml")
+        }
+    }
     defaultConfig {
         minSdk = minSdkValue
         targetSdk = targetSdkValue
@@ -188,9 +167,23 @@ android {
         manifestPlaceholders["GT_INSTALL_CHANNEL"] = "你的 GT_INSTALL_CHANNEL"
     }
     compileOptions {
-//        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    lintOptions {
+        isAbortOnError = false
+    }
+//    lint{
+//        abortOnError = false
+//    }
+    repositories{
+        all {
+            if(this is MavenArtifactRepository){
+                if(url.toString().startsWith("https://kotlin.bintray.com/kotlinx",ignoreCase = true)){
+                    remove(this)
+                }
+            }
+        }
     }
 }
 

@@ -3,16 +3,11 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
-        maven {
-            setUrl("http://download.flutter.io")
-            isAllowInsecureProtocol = true
-        }
-        maven(url ="https://jitpack.io")
         maven(url ="https://kotlin.bintray.com/kotlinx")
     }
 }
 rootProject.name = "GeyanLib"
 include(":shared")
 
-//include(":flutter")
-//project(":flutter").projectDir = file("${rootDir}${File.separator}flutter")
+include(":flutter")
+project(":flutter").projectDir = file("${rootDir}${File.separator}flutter")

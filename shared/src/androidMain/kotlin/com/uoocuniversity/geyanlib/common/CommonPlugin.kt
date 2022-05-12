@@ -6,18 +6,17 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
-actual class CommonPlugin<T : kMethodChannel> actual constructor(private val channelName: String) :
+actual final class CommonPlugin<T : kMethodChannel> actual constructor(private val channelName: String) :
     FlutterPlugin, ActivityAware, MethodChannel.MethodCallHandler {
 
     private lateinit var realChannel: MethodChannel
 
-    internal actual var methodChannel: T
-        get() = TODO("Not yet implemented")
-        set(value) {}
+    internal lateinit var _methodChannel:T
+    internal actual val methodChannel: T = _methodChannel
 
-    actual fun createMethodChannel(): T = TODO("Not yet implemented")
 
-    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
+    final override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
+        val rltDartPointer = result
         methodChannel.onMethodCall(
             call = CommonMethodCall(
                 method = call.method,
@@ -25,16 +24,16 @@ actual class CommonPlugin<T : kMethodChannel> actual constructor(private val cha
                 platformDependencies = PlatformDependencies(activityPluginBinding?.activity, null)
             ),
             result = object : CommonMethodChannel.Result {
-                override fun success(successResult: Any?) {
-                    result.success(successResult)
+                override fun success(result: Any?) {
+                    rltDartPointer.success(result)
                 }
 
                 override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
-                    result.error(errorCode, errorMessage, errorDetails)
+                    rltDartPointer.error(errorCode, errorMessage, errorDetails)
                 }
 
                 override fun notImplemented() {
-                    result.notImplemented()
+                    rltDartPointer.notImplemented()
                 }
             }
         )
@@ -43,26 +42,26 @@ actual class CommonPlugin<T : kMethodChannel> actual constructor(private val cha
 
     private var activityPluginBinding: ActivityPluginBinding? = null
     private var engineBinding: FlutterPlugin.FlutterPluginBinding? = null
-    override fun onDetachedFromActivityForConfigChanges() {
+    final override fun onDetachedFromActivityForConfigChanges() {
         onDetachedFromActivity()
     }
 
-    override fun onDetachedFromActivity() {
+    final override fun onDetachedFromActivity() {
         activityPluginBinding = null
         if (this::realChannel.isInitialized) {
             this.realChannel.setMethodCallHandler(null)
         }
     }
 
-    override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+    final override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
         onAttachedToActivity(binding)
     }
 
-    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+    final override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         activityPluginBinding = binding
     }
 
-    override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+    final override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         engineBinding = binding
         if (!this::realChannel.isInitialized) {
             this.realChannel = MethodChannel(binding.binaryMessenger, channelName)
@@ -70,12 +69,14 @@ actual class CommonPlugin<T : kMethodChannel> actual constructor(private val cha
         this.realChannel.setMethodCallHandler(this)
     }
 
-    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+    final override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         engineBinding = null
         if (this::realChannel.isInitialized) {
             this.realChannel.setMethodCallHandler(null)
         }
     }
+
+
 
 }
 

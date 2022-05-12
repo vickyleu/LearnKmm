@@ -2,9 +2,9 @@ package com.uoocuniversity.geyanlib
 import com.uoocuniversity.geyanlib.common.PlatformDependencies
 
 expect class Platform{
-    actual fun preload()
+    actual suspend fun preload()
 }
 
 expect class PlatformFactory(platformDeps: PlatformDependencies) {
-    actual fun createPlatform(): Platform
+    actual suspend fun createPlatform(): Platform
 }

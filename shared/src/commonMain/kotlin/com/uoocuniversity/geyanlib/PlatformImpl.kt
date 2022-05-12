@@ -12,7 +12,7 @@ class PlatformImpl: kMethodChannel {
 
     }
 
-    fun initGeyanSdk(deps: PlatformDependencies): String {
+    suspend fun initGeyanSdk(deps: PlatformDependencies): String {
         platform=PlatformFactory(deps).createPlatform()
         return ""
     }
