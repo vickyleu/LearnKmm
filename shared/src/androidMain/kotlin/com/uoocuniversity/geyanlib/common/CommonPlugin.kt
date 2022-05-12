@@ -6,13 +6,12 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
-actual final class CommonPlugin<T : kMethodChannel> actual constructor(private val channelName: String) :
+actual class CommonPlugin<T : kMethodChannel> actual constructor(private val channelName: String) :Any(),
     FlutterPlugin, ActivityAware, MethodChannel.MethodCallHandler {
-
     private lateinit var realChannel: MethodChannel
-
     internal lateinit var _methodChannel:T
-    internal actual val methodChannel: T = _methodChannel
+
+    actual val methodChannel: T = _methodChannel
 
 
     final override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {

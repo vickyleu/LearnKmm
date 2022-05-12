@@ -65,6 +65,11 @@ kotlin {
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.CInteropProcess::class.java) {
         settings.extraOpts(listOf("-compiler-option", "-DNS_FORMAT_ARGUMENT(A)="))
     }
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+    }
 
     cocoapods {
         summary = "Some description for the Shared Module"
@@ -100,7 +105,9 @@ kotlin {
     }
 
     sourceSets {
+
         all {
+
             languageSettings.apply {
                 languageVersion = "1.7" // possible values: '1.0', '1.1', '1.2', '1.3', '1.4', '1.5', '1.6', '1.7', '1.8', '1.9'
                 apiVersion = "1.7" // possible values: '1.0', '1.1', '1.2', '1.3', '1.4', '1.5', '1.6', '1.7'
@@ -120,6 +127,7 @@ kotlin {
 
 
         val androidMain by getting{
+
             dependsOn(commonMain)
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${coroutines}")
@@ -139,6 +147,7 @@ kotlin {
 
         val iosArm64Main by getting
         val iosMain by creating {
+
             dependsOn(commonMain)
             iosArm64Main.dependsOn(this)
             val sourceList = arrayListOf<Any>()
@@ -155,6 +164,7 @@ kotlin {
 
 android {
     compileSdk = compileSdkValue
+
     sourceSets {
         getByName("main") {
             manifest.srcFile ("src/androidMain/AndroidManifest.xml")

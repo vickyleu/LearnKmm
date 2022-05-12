@@ -1,14 +1,15 @@
 package com.uoocuniversity.geyanlib.common
 
 import cocoapods.Flutter.*
+import kotlinx.cinterop.ObjCClass
 import platform.Foundation.NSCocoaErrorDomain
 import platform.Foundation.NSError
 import platform.darwin.NSObject
 
-actual final class CommonPlugin<T : kMethodChannel> actual constructor(private val channelName: String) :
-    NSObject(), FlutterPluginProtocolMeta, FlutterPluginProtocol {
+actual class CommonPlugin<T : kMethodChannel> actual constructor(private val channelName: String) :NSObject(),
+     FlutterPluginProtocolMeta, FlutterPluginProtocol {
     internal lateinit var _methodChannel:T
-    internal actual val methodChannel: T = _methodChannel
+    actual val methodChannel: T = _methodChannel
 
     override fun registerWithRegistrar(registrar: NSObject) {
         val engine = registrar as FlutterPluginRegistrarProtocol
