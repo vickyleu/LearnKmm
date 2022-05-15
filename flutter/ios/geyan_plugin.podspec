@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'geyan_plugin'
-  s.version          = '0.0.1'
+  s.version          = '1.0.0'
   s.summary          = 'A new Flutter project.'
   s.description      = <<-DESC
 A new Flutter project.
@@ -15,7 +15,7 @@ A new Flutter project.
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.dependency = 'shared', :podspec => '../../shared/shared.podspec'
+#   s.dependency = 'shared', :podspec => '../../shared/shared.podspec'
   s.platform = :ios, '9.0'
 
   # Flutter.framework does not contain a i386 slice.
