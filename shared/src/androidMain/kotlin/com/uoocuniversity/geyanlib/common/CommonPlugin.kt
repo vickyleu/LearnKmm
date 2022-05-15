@@ -6,13 +6,13 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
-actual class CommonPlugin<T : kMethodChannel> actual constructor(private val channelName: String) :Any(),
+final class CommonPlugin<T : kMethodChannel> constructor(private val channelName: String) :Any(),
     FlutterPlugin, ActivityAware, MethodChannel.MethodCallHandler {
     private lateinit var realChannel: MethodChannel
     internal lateinit var _methodChannel:T
 
-    actual val methodChannel: T = _methodChannel
-
+    private val methodChannel: T
+        get() = _methodChannel
 
     final override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         val rltDartPointer = result

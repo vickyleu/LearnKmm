@@ -8,7 +8,7 @@ import com.uoocuniversity.geyanlib.common.PlatformDependencies
 
 actual class Platform constructor(val manager: GYManager) {
     actual suspend fun preload() {
-        manager.ePreLogin(1000, object : GyCallBack {
+    manager.ePreLogin(1000, object : GyCallBack {
             override fun onSuccess(response: GYResponse?) {
             }
 

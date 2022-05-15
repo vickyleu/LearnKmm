@@ -75,7 +75,7 @@ kotlin {
         summary = "Some description for the Shared Module"
         homepage = "Link to the Shared Module homepage"
         ios.deploymentTarget = deploymentTarget
-
+        version = "1.0.0"
         specRepos {
             url("https://github.com/CocoaPods/Specs.git")
             url("https://github.com/bytedance/cocoapods_sdk_source_repo.git")

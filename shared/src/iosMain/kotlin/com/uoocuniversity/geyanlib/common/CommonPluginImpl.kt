@@ -1,10 +1,19 @@
 package com.uoocuniversity.geyanlib.common
 
-actual abstract class CommonPluginImpl<T : kMethodChannel> actual constructor(channelName: String) {
-    internal actual val innerPlugin = CommonPlugin<T>(channelName)
+import platform.darwin.NSObject
+
+actual abstract class CommonPluginImpl<T : kMethodChannel> actual constructor(private val channelName: String) {
+    private var innerPlugin: CommonPlugin<T>
     init {
-        val channel:T = this.createMethodChannel()
+        val channel: T = this.createMethodChannel()
+        innerPlugin = CommonPlugin<T>(channelName)
         innerPlugin._methodChannel = channel
     }
+
     actual abstract fun createMethodChannel(): T
+
+    fun registerWithRegistrar(registrar: NSObject){
+        innerPlugin.registerWithRegistrar(registrar)
+    }
+
 }
