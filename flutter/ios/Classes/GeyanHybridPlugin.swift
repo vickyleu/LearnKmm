@@ -1,5 +1,5 @@
 import Flutter
-import shared
+//import shared
 class GeyanHybridPlugin : CommonPluginImpl<PlatformImpl>, FlutterPlugin{
 
  public static func register(with registrar: FlutterPluginRegistrar){
