@@ -17,7 +17,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: lib_bridge
+        package: lib.geyan.bridge
         pluginClass: GeyanHybridPlugin
       ios:
         pluginClass: GeyanHybridPlugin
