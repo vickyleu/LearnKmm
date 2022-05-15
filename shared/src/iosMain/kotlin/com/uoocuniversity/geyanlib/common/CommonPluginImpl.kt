@@ -3,7 +3,7 @@ package com.uoocuniversity.geyanlib.common
 import cocoapods.Flutter.FlutterPluginRegistrarProtocol
 import platform.darwin.NSObject
 
-actual abstract class CommonPluginImpl<T : kMethodChannel> actual constructor(private val channelName: String) {
+actual abstract class CommonPluginImpl<T : kMethodChannel> actual constructor(private val channelName: String):kotlin.Any(){
     private var innerPlugin: CommonPlugin<T>
     init {
         val channel: T = this.createMethodChannel()
