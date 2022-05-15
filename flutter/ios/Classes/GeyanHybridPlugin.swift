@@ -4,7 +4,7 @@ class GeyanHybridPlugin : CommonPluginImpl<PlatformImpl>, FlutterPlugin{
 
  public static func register(with registrar: FlutterPluginRegistrar){
    let plugin = GeyanHybridPlugin.init(channelName : "abcdefd")
-     plugin.registerWithRegistrar(registrar: registrar as! NSObject)
+     plugin.registerWithRegistrar(registrar: registrar)
  }
 
 override func createMethodChannel()-> PlatformImpl{

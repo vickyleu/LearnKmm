@@ -1,5 +1,6 @@
 package com.uoocuniversity.geyanlib.common
 
+import cocoapods.Flutter.FlutterPluginRegistrarProtocol
 import platform.darwin.NSObject
 
 actual abstract class CommonPluginImpl<T : kMethodChannel> actual constructor(private val channelName: String) {
@@ -12,7 +13,7 @@ actual abstract class CommonPluginImpl<T : kMethodChannel> actual constructor(pr
 
     actual abstract fun createMethodChannel(): T
 
-    fun registerWithRegistrar(registrar: NSObject){
+    fun registerWithRegistrar(registrar: FlutterPluginRegistrarProtocol){
         innerPlugin.registerWithRegistrar(registrar)
     }
 

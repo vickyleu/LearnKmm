@@ -52,9 +52,8 @@ final class CommonPlugin<T : kMethodChannel> constructor(private val channelName
     }
 
 
-    fun registerWithRegistrar(registrar: NSObject) {
-        val engine = registrar as FlutterPluginRegistrarProtocol
-        engine.addMethodCallDelegate(
+    fun registerWithRegistrar(registrar: FlutterPluginRegistrarProtocol) {
+        registrar.addMethodCallDelegate(
             delegate = delegate, channel =FlutterMethodChannel(
                 channelName,
                 binaryMessenger = registrar.messenger(),
