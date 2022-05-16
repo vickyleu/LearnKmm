@@ -1,4 +1,6 @@
 rootProject.name = 'android'
 
-include(":shared")
-project(":shared").projectDir = file("${rootProject.projectDir.parentFile.parentFile}/shared")
+//include(":shared")
+//project(":shared").projectDir = file(rootDir.parentFile.parentFile,"shared")
+//
+//println( "${file(rootDir.parentFile.parentFile,"shared")}" )

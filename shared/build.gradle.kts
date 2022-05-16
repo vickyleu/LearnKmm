@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.tasks.factory.registerTask
+
 plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
@@ -71,10 +73,7 @@ kotlin {
         // The default destination directory is "<build directory>/fat-framework".
         destinationDir = buildDir.resolve("fat-framework/release")
         // Specify the frameworks to be merged.
-        from(
-            iosList[0].binaries.getFramework("RELEASE"),
-            iosList[1].binaries.getFramework("RELEASE")
-        ).also {
+        from(iosList.map{it.binaries.getFramework("RELEASE")}).also {
             val dir = File("${projectDir.parentFile}/flutter/ios/Classes/")
             val framework = File(dir,"$baseName.framework")
             val fatFramework = File(destinationDir,"$baseName.framework")
@@ -173,6 +172,7 @@ kotlin {
                 compileOnly("io.flutter:x86_64_debug:$flutter_lib")
                 compileOnly("io.flutter:x86_debug:$flutter_lib")
             }
+
         }
 
         val iosArm32Main by getting {
@@ -236,6 +236,53 @@ android {
             }
         }
     }
+}
+
+afterEvaluate {
+    val releaseAARCopy = tasks.registerTask(taskName = "releaseAARCopy",taskType = Copy::class.java,action = object :
+        com.android.build.gradle.internal.tasks.factory.TaskConfigAction<Copy>{
+        override fun configure(task: Copy) {
+            val fromPath = arrayListOf(
+                buildDir.absolutePath,
+                "outputs",
+                "aar"
+            ).joinToString(separator = File.separator)
+            val destPath = arrayListOf(
+                rootDir.absolutePath,
+                "flutter",
+                "android",
+                "libs"
+            ).joinToString(separator = File.separator)
+            task.from(fromPath)
+            task.include("${project.name}-release.aar")
+            task.into(destPath)
+            task.rename("${project.name}-release.aar","${project.name}.aar")
+//            println("Android AAR文件已经拷贝到${destPath}")
+            tasks.named("assemble") { finalizedBy(task) }
+        }
+    })
+
+    val releaseFrameworkCopy = tasks.registerTask(taskName = "releaseFrameworkCopy",taskType = Copy::class.java,action = object :
+        com.android.build.gradle.internal.tasks.factory.TaskConfigAction<Copy>{
+        override fun configure(task: Copy) {
+            val fromPath = arrayListOf(
+                buildDir.absolutePath,
+                "fat-framework",
+                "release"
+            ).joinToString(separator = File.separator)
+            val destPath = arrayListOf(
+                rootDir.absolutePath,
+                "flutter",
+                "ios",
+                "Classes"
+            ).joinToString(separator = File.separator)
+            task.from(fromPath)
+            task.include("${project.name}.framework")
+            task.into(destPath)
+            tasks.named("assemble") { finalizedBy(task) }
+        }
+    })
+
 }
 
 tasks.named<org.jetbrains.kotlin.gradle.tasks.DefFileTask>("generateDefFlutter").configure {

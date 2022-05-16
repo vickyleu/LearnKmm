@@ -26,6 +26,9 @@ rootProject.allprojects {
             url("http://download.flutter.io")
             allowInsecureProtocol(true)
         }
+        flatDir {
+            dirs 'libs'
+        }
     }
 }
 
@@ -62,11 +65,7 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
 def flutter_lib = "1.0.0-029e8fdf54966a866004d9f4b937aa6d724a4d4d"
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
-    api(project(":shared")) {
-        exclude module: 'iosMain'
-    }
-
+    implementation(name:'shared', ext:'aar')
     compileOnly("io.flutter:flutter_embedding_debug:$flutter_lib")
     compileOnly("io.flutter:arm64_v8a_debug:$flutter_lib")
     compileOnly("io.flutter:armeabi_v7a_debug:$flutter_lib")

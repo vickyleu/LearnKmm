@@ -191,11 +191,6 @@ __attribute__((swift_name("PlatformImpl")))
 @property SharedPlatform *platform __attribute__((swift_name("platform")));
 @end;
 
-__attribute__((unavailable("Kotlin subclass of Objective-C class can't be imported")))
-__attribute__((swift_name("AppleProxy")))
-@interface SharedAppleProxy : NSObject
-@end;
-
 __attribute__((objc_subclassing_restricted))
 __attribute__((swift_name("CommonMethodCall")))
 @interface SharedCommonMethodCall : SharedBase
