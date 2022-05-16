@@ -14,6 +14,7 @@ A new Flutter project.
   s.author           = { 'Your Company' => 'email@example.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
+  s.exclude_files = [ 'Classes/shared.framework/**/*.plist', 'Classes/shared.framework/**/*.modulemap' ]
   s.dependency 'Flutter'
   s.platform = :ios, '9.0'
   s.vendored_frameworks = 'Classes/shared.framework' #导入kotlin动态库
