@@ -43,16 +43,48 @@ val espresso = "3.2.0"
 version = library_version
 
 kotlin {
+
+    /*targets{
+        fromPreset(presets.linuxX64, 'linuxX64')
+        fromPreset(presets.iosArm64, 'iosArm64')
+        fromPreset(presets.iosArm32, 'iosArm32')
+        fromPreset(presets.iosX64, 'iosX64')
+        fromPreset(presets.macosX64, 'macosX64')
+        fromPreset(presets.mingwX64, 'windowsX64')
+    }*/
     android()
-    iosArm64()
-    tasks.register<org.jetbrains.kotlin.gradle.tasks.FatFrameworkTask>("releaseIOSFramework") {
+
+    val iosList = listOf(
+        iosArm32(),
+        iosArm64(),
+    )
+    iosList.forEach {
+        it.binaries.framework {
+            baseName = "shared"
+        }
+    }
+
+    // Create a task to build a fat framework.
+    tasks.register<org.jetbrains.kotlin.gradle.tasks.FatFrameworkTask>("releaseFatFramework") {
+        // The fat framework must have the same base name as the initial frameworks.
         baseName = "shared"
-        destinationDir = buildDir.resolve("cocoapods/framework")
-        val isReleaseBuild = !"$version".contains("dev", ignoreCase = false)
-        val buildType = if (isReleaseBuild) "RELEASE" else "DEBUG"
-//            from(
-//                it.binaries.getFramework(buildType),
-//            )
+        // The default destination directory is "<build directory>/fat-framework".
+        destinationDir = buildDir.resolve("fat-framework/release")
+        // Specify the frameworks to be merged.
+        from(
+            iosList[0].binaries.getFramework("RELEASE"),
+            iosList[1].binaries.getFramework("RELEASE")
+        ).also {
+            val dir = File("${projectDir.parentFile}/flutter/ios/Classes/")
+            val framework = File(dir,"$baseName.framework")
+            val fatFramework = File(destinationDir,"$baseName.framework")
+            if(framework.exists()){
+                framework.delete()
+            }
+            if(fatFramework.exists()){
+                fatFramework.copyRecursively(File(dir,"$baseName.framework"),overwrite = true)
+            }
+        }
     }
 
     targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget> {
@@ -102,10 +134,10 @@ kotlin {
         // Maps custom Xcode configuration to NativeBuildType
         xcodeConfigurationToNativeBuildType["CUSTOM_DEBUG"] = org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType.DEBUG
         xcodeConfigurationToNativeBuildType["CUSTOM_RELEASE"] = org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType.RELEASE
+
     }
 
     sourceSets {
-
         all {
 
             languageSettings.apply {
@@ -124,8 +156,6 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutines}")
             }
         }
-
-
         val androidMain by getting{
 
             dependsOn(commonMain)
@@ -145,9 +175,20 @@ kotlin {
             }
         }
 
+        val iosArm32Main by getting {
+            kotlin.srcDir("src/iosMain")
+            dependsOn(commonMain)
+            val sourceList = arrayListOf<Any>()
+            sourceList.addAll(resources.srcDirs)
+            sourceList.add(file("${projectDir.parentFile}/libs"))
+            resources.setSrcDirs(sourceList)
+            dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-native:${coroutines_native}")
+            }
+        }
+
         val iosArm64Main by getting
         val iosMain by creating {
-
             dependsOn(commonMain)
             iosArm64Main.dependsOn(this)
             val sourceList = arrayListOf<Any>()

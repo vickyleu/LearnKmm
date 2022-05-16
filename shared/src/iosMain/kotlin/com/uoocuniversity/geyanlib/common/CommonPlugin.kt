@@ -6,6 +6,7 @@ import kotlinx.cinterop.ObjCClass
 import objcnames.classes.Protocol
 import platform.Foundation.NSCocoaErrorDomain
 import platform.Foundation.NSError
+import platform.darwin.NSInteger
 import platform.darwin.NSObject
 import platform.darwin.NSUInteger
 
@@ -34,7 +35,7 @@ final class CommonPlugin<T : kMethodChannel> constructor(private val channelName
                         result?.invoke(
                             NSError.errorWithDomain(
                                 domain = NSCocoaErrorDomain,
-                                code = errorCode.toLong(),
+                                code = errorCode.toLong() as NSInteger,
                                 userInfo = hashMapOf(
                                     "errorMessage" to errorMessage,
                                     "errorDetails" to errorDetails
