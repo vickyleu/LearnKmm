@@ -7,6 +7,7 @@ pluginManagement {
     }
 }
 rootProject.name = "GeyanLib"
+
 include(":shared")
 
 include(":flutter")

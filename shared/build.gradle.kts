@@ -10,7 +10,6 @@ plugins {
 val library_version = "1.0.0"
 
 //app level
-val gradle = "7.1.3"
 val kotlin = "1.6.21"
 
 
@@ -20,7 +19,7 @@ val minSdkValue = 21
 val targetSdkValue = 29
 
 //libs
-val flutter_lib = "1.0.0-029e8fdf54966a866004d9f4b937aa6d724a4d4d"
+val flutter_lib = "1.0.0-d1b9a6938ad77326ac3a94d92bbc77933ed829ed"
 val coreKtx = "1.2.0"
 val koin = "3.2.0-beta-1"
 val kodein_di = "7.11.0"
@@ -138,12 +137,11 @@ kotlin {
 
     sourceSets {
         all {
-
             languageSettings.apply {
-                languageVersion = "1.7" // possible values: '1.0', '1.1', '1.2', '1.3', '1.4', '1.5', '1.6', '1.7', '1.8', '1.9'
-                apiVersion = "1.7" // possible values: '1.0', '1.1', '1.2', '1.3', '1.4', '1.5', '1.6', '1.7'
+                languageVersion = "1.6" // possible values: '1.0', '1.1', '1.2', '1.3', '1.4', '1.5', '1.6', '1.7', '1.8', '1.9'
+                apiVersion = "1.6" // possible values: '1.0', '1.1', '1.2', '1.3', '1.4', '1.5', '1.6', '1.7'
                 optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
-//                enableLanguageFeature("InlineClasses") // language feature name
+                enableLanguageFeature("InlineClasses") // language feature name
                 optIn("kotlin.ExperimentalUnsignedTypes") // annotation FQ-name
                 progressiveMode = true // false by default
             }
@@ -282,7 +280,6 @@ afterEvaluate {
             tasks.named("assemble") { finalizedBy(task) }
         }
     })
-
 }
 
 tasks.named<org.jetbrains.kotlin.gradle.tasks.DefFileTask>("generateDefFlutter").configure {
