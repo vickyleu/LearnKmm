@@ -1,4 +1,5 @@
 rootProject.name = 'android'
 
+//NOT WORKING
 //include(":shared")
-//project(":shared").projectDir = file("${rootDir.parentFile.parentFile}${File.separator}shared")
+//project(":shared").projectDir = file("${rootProject.projectDir.parentFile.parentFile}${File.separator}shared")

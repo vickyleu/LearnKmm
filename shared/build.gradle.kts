@@ -246,7 +246,7 @@ afterEvaluate {
                 "aar"
             ).joinToString(separator = File.separator)
             val destPath = arrayListOf(
-                rootDir.absolutePath,
+                projectDir.parentFile.absolutePath,
                 "flutter",
                 "android",
                 "libs"
@@ -256,9 +256,11 @@ afterEvaluate {
             task.into(destPath)
             task.rename("${project.name}-release.aar","${project.name}.aar")
 //            println("Android AAR文件已经拷贝到${destPath}")
-            tasks.named("assemble") { finalizedBy(task) }
+
         }
     })
+
+    tasks.named("assemble") { finalizedBy(releaseAARCopy) }
 
     val releaseFrameworkCopy = tasks.registerTask(taskName = "releaseFrameworkCopy",taskType = Copy::class.java,action = object :
         com.android.build.gradle.internal.tasks.factory.TaskConfigAction<Copy>{
@@ -269,7 +271,7 @@ afterEvaluate {
                 "release"
             ).joinToString(separator = File.separator)
             val destPath = arrayListOf(
-                rootDir.absolutePath,
+                projectDir.parentFile.absolutePath,
                 "flutter",
                 "ios",
                 "Classes"
@@ -277,9 +279,10 @@ afterEvaluate {
             task.from(fromPath)
             task.include("${project.name}.framework")
             task.into(destPath)
-            tasks.named("assemble") { finalizedBy(task) }
+
         }
     })
+    tasks.named("assemble") { finalizedBy(releaseFrameworkCopy) }
 }
 
 tasks.named<org.jetbrains.kotlin.gradle.tasks.DefFileTask>("generateDefFlutter").configure {

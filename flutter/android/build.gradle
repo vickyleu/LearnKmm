@@ -50,18 +50,18 @@ android {
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
-        main.jniLibs.srcDirs += 'libs'
     }
 
     defaultConfig {
         minSdkVersion 21
+        manifestPlaceholders["GETUI_APPID"] = "你的  GETUI_APPID"
+        manifestPlaceholders["GT_INSTALL_CHANNEL"] = "你的 GT_INSTALL_CHANNEL"
     }
-
 }
-//Groovy
+/*//Groovy
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
     kotlinOptions.freeCompilerArgs += ["-Xskip-prerelease-check"]
-}
+}*/
 fataar {
     /**
      * 如果传递为真，本地 jar 模块和远程库的依赖将被嵌入。（本地aar模块不支持）
@@ -76,6 +76,7 @@ def flutter_lib = "1.0.0-d1b9a6938ad77326ac3a94d92bbc77933ed829ed"
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     embed(name: 'shared', ext: 'aar')
+//    implementation project(":shared") //NOT WORKING
     compileOnly("io.flutter:flutter_embedding_debug:$flutter_lib")
     compileOnly("io.flutter:arm64_v8a_debug:$flutter_lib")
     compileOnly("io.flutter:armeabi_v7a_debug:$flutter_lib")
